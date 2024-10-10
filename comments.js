@@ -1,33 +1,35 @@
-// create web server
-// create a route for /comments
-// when user sends a GET request to /comments, return a JSON object with some comments
+// Create web server
+// 1. Load http module
+var http = require('http');
+var fs = require('fs');
+var path = require('path');
+var url = require('url');
+var comments = require('./comments');
 
-const express = require('express');
-const app = express();
+// 2. Create server
+http.createServer(function (req, res) {
+    var url_parts = url.parse(req.url, true);
+    var query = url_parts.query;
+    var pathname = url_parts.pathname;
 
-app.get('/comments', (req, res) => {
-  res.json([
-    {
-      username: 'Todd',
-      comment: 'lol that is so funny'
-    },
-    {
-      username: 'Skyler',
-      comment: 'I like to go birdwatching with my dog'
-    },
-    {
-      username: 'Sk8erBoi',
-      comment: 'Plz delete your account, Todd'
-    },
-    {
-      username: 'onlysayswoof',
-      comment: 'woof woof woof'
+    // 3. Send the HTTP header
+    // HTTP Status: 200 : OK
+    // Content Type: text/plain
+    res.writeHead(200, {'Content-Type': 'text/plain'});
+
+    // 4. Send the response body as "Hello World"
+    if (pathname === '/addComment') {
+        var comment = query.comment;
+        var name = query.name;
+        comments.addComment(name, comment);
+        res.end('Comment added');
+    } else if (pathname === '/getComments') {
+        res.end(JSON.stringify(comments.getComments()));
+    } else {
+        res.end('Invalid request');
     }
-  ]);
-});
 
-app.listen(3000, () => {
-  console.log('Server is listening on port 3000');
-});
+}).listen(8080);
 
-// run the server and visit http://localhost:3000/comments to see the comments
+// Console will print the message
+console.log('Server running at http://' + 'localhost' + ':' + '8080' + '/');
