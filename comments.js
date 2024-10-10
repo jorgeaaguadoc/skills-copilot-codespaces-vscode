@@ -1,19 +1,33 @@
 // create web server
+// create a route for /comments
+// when user sends a GET request to /comments, return a JSON object with some comments
+
 const express = require('express');
 const app = express();
-const port = 3000;
-// create a comments array
-const comments = [
-    {name: 'Alex', content: 'This is a comment'},
-    {name: 'Jane', content: 'This is another comment'}
-];
-// create a route to get the comments
+
 app.get('/comments', (req, res) => {
-    res.json(comments);
+  res.json([
+    {
+      username: 'Todd',
+      comment: 'lol that is so funny'
+    },
+    {
+      username: 'Skyler',
+      comment: 'I like to go birdwatching with my dog'
+    },
+    {
+      username: 'Sk8erBoi',
+      comment: 'Plz delete your account, Todd'
+    },
+    {
+      username: 'onlysayswoof',
+      comment: 'woof woof woof'
+    }
+  ]);
 });
-// start the server
-app.listen(port, () => {
-    console.log(`Server listening at http://localhost:${port}`);
+
+app.listen(3000, () => {
+  console.log('Server is listening on port 3000');
 });
-// run the server using node comments.js
-// open the browser and go to http://localhost:3000/comments to see the comments
+
+// run the server and visit http://localhost:3000/comments to see the comments
